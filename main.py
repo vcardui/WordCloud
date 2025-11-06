@@ -8,7 +8,7 @@
 # +----------------------------------------------------------------------------+
 # | Author.......: Vanessa Reteguín <vanessa@reteguin.com>
 # | First release: November 4th, 2025
-# | Last update..: November 5th, 2025
+# | Last update..: November 6th, 2025
 # | WhatIs.......: Words Analyzer - Class
 # +----------------------------------------------------------------------------+
 
