@@ -20,10 +20,19 @@ from WordsAnalyzer_class import WordsAnalyzer
 
 # ------------------------- Variables -------------------------
 libraryRoute = 'library/'
+groupedTokens = {}
+allTokens = ""
 
 # ------------------------- Objects -------------------------
 cloudMaker = WordsAnalyzer()
 
 # --------------------------- Code ----------------------------
 for i in os.listdir(libraryRoute):
-    cloudMaker.makeCloud(f'{libraryRoute}{i}')
+    groupedTokens[i] = cloudMaker.getTokensFromFile(f'{libraryRoute}{i}', show_tokens=False)
+    cloudMaker.makeCloud(groupedTokens[i], "self")
+
+for j in groupedTokens:
+    print(f"{j}: {groupedTokens[j]}")
+    allTokens += groupedTokens[j]
+
+cloudMaker.makeCloud(allTokens, "AllTokens")

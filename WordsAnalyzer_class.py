@@ -47,25 +47,35 @@ class WordsAnalyzer:
         nltk.download('punkt_tab') # [1]
         nltk.download('stopwords')
 
-    def makeCloud(self, fileroute):
+        self.name = ""
+        self.texto_tokens_filtrados = ""
+
+    def getTokensFromFile(self, fileroute, show_tokens = False):
         if os.path.exists(fileroute):
             with open(fileroute, 'rb') as rawdata:
                 result = chardet.detect(rawdata.read()) # [2]
-                print(fileroute, result['encoding'])
+                # print(fileroute, result['encoding'])
 
             with open(fileroute, 'r', encoding=result['encoding']) as file:
+                self.name = file.name
                 text = file.read()
                 tokens = word_tokenize(text, language='spanish')
-                # print("Tokens: ", tokens)
 
                 stop_words = set(stopwords.words('spanish'))
                 tokens_filtrados = [palabra for palabra in tokens if palabra.lower() not in stop_words]
-                print("Tokens sin stopwords:", tokens_filtrados)
-                texto_tokens_filtrados = ' '.join(tokens_filtrados)
+                if show_tokens:
+                    print("Tokens sin stopwords:", tokens_filtrados)
+                self.texto_tokens_filtrados = ' '.join(tokens_filtrados)
 
-                wordcloud = WordCloud(background_color="white").generate(texto_tokens_filtrados)
-                plt.imshow(wordcloud, interpolation='bilinear')
-                plt.axis("off")
-                plt.show()
+                return self.texto_tokens_filtrados
         else:
             print(f"File not found on route: {fileroute}")
+
+    def makeCloud(self, tokens, name):
+        if name == "self":
+            name = self.name
+        wordcloud = WordCloud(background_color="white").generate(tokens)
+        plt.imshow(wordcloud, interpolation='bilinear')
+        plt.axis("off")
+        plt.get_current_fig_manager().set_window_title(name)
+        plt.show()
