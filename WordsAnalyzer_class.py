@@ -26,6 +26,7 @@ import chardet # chardet.detect(rawdata.read())
 import ssl # ssl._create_default_https_context
 
 import matplotlib.pyplot as plt
+import numpy as np # np.ogrid[:800, :800]
 
 import nltk
 from nltk import word_tokenize
@@ -74,7 +75,19 @@ class WordsAnalyzer:
     def makeCloud(self, tokens, name):
         if name == "self":
             name = self.name
-        wordcloud = WordCloud(background_color="white").generate(tokens)
+
+        x, y = np.ogrid[:1600, :1600]
+        center = (800, 800)
+        radius = 800
+        mask_circular = (x - center[0]) ** 2 + (y - center[1]) ** 2 > radius ** 2
+        mask_circular = 255 * mask_circular.astype(int)  # 255 = blanco (fuera del círculo)
+
+        wordcloud = WordCloud(width=1600,
+            height=1600,
+            background_color="white",
+            mask=mask_circular,
+            colormap="plasma").generate(tokens)
+
         plt.imshow(wordcloud, interpolation='bilinear')
         plt.axis("off")
         plt.get_current_fig_manager().set_window_title(name)
